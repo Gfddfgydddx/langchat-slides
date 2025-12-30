@@ -10,16 +10,18 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger
 } from '@/components/ui/navigation-menu'
-import {BookText, Github, Moon, Sun} from 'lucide-vue-next'
+import {BookText, Github, Languages, Moon, Sun} from 'lucide-vue-next'
 import {useAppStore} from '@/stores/useAppStore'
+import {useI18n} from '@/composables/useI18n'
 
 const store = useAppStore()
+const { t } = useI18n()
 </script>
 
 <template>
   <header class="flex h-16 items-center justify-between px-6 bg-card border-b border-border/50 shrink-0 z-10 transition-colors duration-300">
     <div class="flex items-center gap-2 font-bold text-lg tracking-tight">
-      <img src="/favicon.ico" alt="Logo" class="h-8 w-8 rounded-lg" />
+      <img alt="Logo" class="h-8 w-8 rounded-lg" src="/favicon.ico" />
       <span class="">LangChat Slides</span>
     </div>
     <div class="flex items-center gap-2">
@@ -84,6 +86,15 @@ const store = useAppStore()
       <div class="h-4 w-px bg-border/50"></div>
       
       <div class="flex items-center gap-2">
+        <Button
+            :title="store.locale === 'zh' ? t('switchToEnglish').value : t('switchToChinese').value"
+            class="rounded-full"
+            size="icon"
+            variant="ghost"
+            @click="store.toggleLocale"
+        >
+          <Languages class="h-4 w-4" />
+        </Button>
         <Button 
           class="rounded-full"
           size="icon" 
