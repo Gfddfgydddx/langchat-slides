@@ -128,7 +128,7 @@ function parseSlides(content: string, initialSlides: Slide[] = []) {
         content: body,
         syntax: body
       }
-      if (store.infographic != null) {
+      if (store.infographic != null && store.infographic.getOptions().data) {
         slide.title = store.infographic.getOptions().data!.title || 'Untitled'
       }
       return slide
