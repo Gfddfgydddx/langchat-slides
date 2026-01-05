@@ -97,6 +97,7 @@ EN: AntV Infographic Syntax is a syntax for describing information graph renderi
 
 Draw an information graph of the Internet technology evolution
 
+```yaml
 [slide]
 infographic list-row-horizontal-icon-arrow
 data
@@ -128,6 +129,7 @@ label AI Large Model
 desc ChatGPT ignites the generation-based AI revolution
 icon mdi/brain
 [/slide]
+```
 
 ---
 
