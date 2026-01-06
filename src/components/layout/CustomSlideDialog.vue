@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref } from 'vue'
+import {ref} from 'vue'
 import {
   Dialog,
   DialogContent,
@@ -9,11 +9,11 @@ import {
   DialogTitle,
   DialogTrigger
 } from '@/components/ui/dialog'
-import { Button } from '@/components/ui/button'
-import { Textarea } from '@/components/ui/textarea'
-import { useAppStore } from '@/stores/useAppStore'
-import { PlusCircle } from 'lucide-vue-next'
-import { useI18n } from '@/composables/useI18n'
+import {Button} from '@/components/ui/button'
+import {Textarea} from '@/components/ui/textarea'
+import {useAppStore} from '@/stores/useAppStore'
+import {PlusCircle} from 'lucide-vue-next'
+import {useI18n} from '@/composables/useI18n'
 
 const store = useAppStore()
 const { t } = useI18n()
@@ -25,46 +25,15 @@ const renderMode = ref<'replace' | 'append'>('replace')
 function handleRender() {
   if (!customSyntax.value.trim()) return
   
-  const content = customSyntax.value
-  const parts = content.split('[slide]')
-  const potentialSlides = parts.slice(1)
+  // 将幻灯片语法填充到输入框中
+  store.inputPrompt = `请基于以下幻灯片语法生成幻灯片：\n\n${customSyntax.value}`
   
-  if (potentialSlides.length > 0) {
-    const newSlides = potentialSlides.map((part, index) => {
-      let body = part
-      const closingIndex = part.indexOf('[/slide]')
-      if (closingIndex !== -1) {
-        body = part.substring(0, closingIndex)
-      }
-      
-      body = body.trim()
-      const titleMatch = body.match(/^title\s+(.*)/m)
-      
-      const slide = {
-        id: `slide-${Date.now()}-${index}`,
-        title: (titleMatch && titleMatch[1]) ? titleMatch[1] : `Slide ${index + 1}`,
-        content: body,
-        syntax: body
-      }
-      return slide
-    })
-    
-    const validSlides = newSlides.filter(s => s.content.length > 5)
-    
-    if (validSlides.length > 0) {
-      if (renderMode.value === 'append') {
-        store.appendSlides(validSlides)
-        store.currentSlideIndex = store.slides.length - 1
-      } else {
-        store.setSlides(validSlides)
-        store.currentSlideIndex = 0
-      }
-      
-      // Close dialog and clear input
-      isOpen.value = false
-      customSyntax.value = ''
-    }
-  }
+  // 更新渲染模式
+  store.slideRenderMode = renderMode.value
+  
+  // Close dialog and clear input
+  isOpen.value = false
+  customSyntax.value = ''
 }
 
 function handleCancel() {
@@ -76,9 +45,9 @@ function handleCancel() {
 <template>
   <Dialog v-model:open="isOpen">
     <DialogTrigger as-child>
-      <Button class="h-8 gap-2" size="sm" variant="ghost">
+      <Button class="h-8 cursor-pointer gap-2 w-full justify-start" size="sm" variant="ghost">
         <PlusCircle class="h-4 w-4" />
-        <span class="text-xs">{{ t('custom').value }}</span>
+        <span class="text-xs">{{ t('customSlide').value }}</span>
       </Button>
     </DialogTrigger>
     <DialogContent class="sm:max-w-[600px]">
@@ -116,8 +85,8 @@ function handleCancel() {
           <label class="text-sm font-medium shrink-0">{{ t('slideSyntax').value }}:</label>
           <Textarea
             v-model="customSyntax"
-            class="flex-1 font-mono text-xs resize-none"
             :placeholder="t('slideSyntaxPlaceholder').value"
+            class="flex-1 font-mono text-xs resize-none"
           />
         </div>
       </div>

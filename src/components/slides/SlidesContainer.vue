@@ -3,16 +3,21 @@ import {useAppStore} from '@/stores/useAppStore'
 import SlideThumbnail from './SlideThumbnail.vue'
 import SlidesHeader from './SlidesHeader.vue'
 import SlidesCanvas from './SlidesCanvas.vue'
-import {LayoutTemplate, PlusCircle} from 'lucide-vue-next'
+import {LayoutTemplate, Plus, PlusCircle} from 'lucide-vue-next'
 import {useI18n} from '@/composables/useI18n'
 import {useFullscreen} from '@vueuse/core'
 import {ref} from 'vue'
+import {Button} from '@/components/ui/button'
 
 const store = useAppStore()
 const { t } = useI18n()
 
 const containerRef = ref<HTMLElement | null>(null)
 const { isFullscreen, toggle } = useFullscreen(containerRef)
+
+function handleAddSlide() {
+  store.addEmptySlide()
+}
 </script>
 
 <template>
@@ -24,7 +29,18 @@ const { isFullscreen, toggle } = useFullscreen(containerRef)
           <LayoutTemplate class="h-4 w-4" />
           {{ t('slides').value }}
         </span>
-        <span class="text-xs text-muted-foreground bg-muted px-2 py-0.5 rounded-full">{{ store.slides.length }}</span>
+        <div class="flex items-center gap-2">
+          <span class="text-xs text-muted-foreground bg-muted px-2 py-0.5 rounded-full">{{ store.slides.length }}</span>
+          <Button
+            :title="t('addSlide').value"
+            class="h-6 w-6 p-0 hover:bg-primary/10"
+            size="icon"
+            variant="ghost"
+            @click="handleAddSlide"
+          >
+            <Plus class="h-3.5 w-3.5" />
+          </Button>
+        </div>
       </div>
       <div class="flex-1 overflow-y-auto px-4 pb-4 custom-scrollbar">
         <div class="flex flex-col gap-3 py-2">

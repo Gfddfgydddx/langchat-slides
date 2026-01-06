@@ -1,7 +1,7 @@
 import {defineStore} from 'pinia'
 import {computed, ref, shallowRef} from 'vue'
 import {useDark, useStorage, useToggle} from '@vueuse/core'
-import {type Message, type Slide} from '@/types'
+import {type Slide} from '@/types'
 import {Infographic} from '@antv/infographic'
 
 export const useAppStore = defineStore('app-store', () => {
@@ -16,7 +16,7 @@ export const useAppStore = defineStore('app-store', () => {
     attribute: 'class',
     valueDark: 'dark',
     valueLight: 'light',
-    initialValue: 'light', // Prefer dark
+    initialValue: 'light',
   })
   const toggleDark = useToggle(isDark)
 
@@ -31,12 +31,11 @@ export const useAppStore = defineStore('app-store', () => {
   const model = useStorage('langchat-slides-model-v1', defaultModel)
 
   // --- Functional State ---
-  const messages = ref<Message[]>([])
   const slides = ref<Slide[]>([])
   const currentSlideIndex = ref(0)
   const isStreaming = ref(false)
   const slideRenderMode = ref<'replace' | 'append'>('replace')
-  const showCodeEditor = ref(false)
+  const inputPrompt = ref('')
   const exportRequest = ref<{ format: 'png' | 'svg' | 'pdf' } | null>(null)
 
   // Canvas State
@@ -69,23 +68,8 @@ export const useAppStore = defineStore('app-store', () => {
     return !!apiKey.value && apiKey.value.trim().length > 0
   }
 
-  function addMessage(message: Omit<Message, 'timestamp'>) {
-    messages.value.push({
-      ...message,
-      timestamp: Date.now()
-    })
-  }
-
-  function updateLastMessage(content: string) {
-    const lastMessage = messages.value[messages.value.length - 1]
-    if (lastMessage) {
-      lastMessage.content = content
-    }
-  }
-
   function setSlides(newSlides: Slide[]) {
     slides.value = newSlides
-    // Do not reset index here to support streaming updates without jumping
   }
 
   function appendSlides(newSlides: Slide[]) {
@@ -123,15 +107,30 @@ export const useAppStore = defineStore('app-store', () => {
     customPalette.value = colors
   }
 
-  function toggleCodeEditor() {
-    showCodeEditor.value = !showCodeEditor.value
+  function toggleSlideRenderMode() {
+    slideRenderMode.value = slideRenderMode.value === 'replace' ? 'append' : 'replace'
   }
 
-  function updateCurrentSlideSyntax(syntax: string) {
-    const slide = slides.value[currentSlideIndex.value]
+  function updateSlideSyntax(slideIndex: number, syntax: string) {
+    const slide = slides.value[slideIndex]
     if (slide) {
       slide.syntax = syntax
+      slide.content = syntax
     }
+  }
+
+  function addEmptySlide() {
+    const newSlide: Slide = {
+      id: `slide-${Date.now()}`,
+      content: 'infographic list-row-simple-horizontal-arrow\ndata\n  title 新幻灯片\n  desc 幻灯片描述\n  items\n    - label 项目 1\n      desc 描述 1\n      icon mdi/web',
+      syntax: 'infographic list-row-simple-horizontal-arrow\ndata\n  title 新幻灯片\n  desc 幻灯片描述\n  items\n    - label 项目 1\n      desc 描述 1\n      icon mdi/web'
+    }
+    
+    // 追加模式
+    slides.value = [...slides.value, newSlide]
+    
+    // 激活新添加的幻灯片
+    currentSlideIndex.value = slides.value.length - 1
   }
 
   function triggerExport(format: 'png' | 'svg' | 'pdf') {
@@ -171,23 +170,21 @@ export const useAppStore = defineStore('app-store', () => {
     baseUrl,
     model,
     isConfigured,
-    messages,
     slides,
     currentSlideIndex,
     isStreaming,
-    slideRenderMode,
-    showCodeEditor,
-    toggleCodeEditor,
-    updateCurrentSlideSyntax,
+    inputPrompt,
     exportRequest,
     triggerExport,
     currentSlide,
     infographic,
-    addMessage,
-    updateLastMessage,
     setSlides,
     appendSlides,
     clearSlides,
+    addEmptySlide,
+    slideRenderMode,
+    toggleSlideRenderMode,
+    updateSlideSyntax,
     palettes,
     canvasScale,
     zoomIn,

@@ -1,21 +1,8 @@
 <script lang="ts" setup>
-import {watch} from 'vue'
 import Header from '@/components/layout/Header.vue'
-import ChatContainer from '@/components/chat/ChatContainer.vue'
+import SlideControlPanel from '@/components/slides/SlideControlPanel.vue'
 import SlidesContainer from '@/components/slides/SlidesContainer.vue'
-import CodeEditorPanel from '@/components/slides/CodeEditorPanel.vue'
 import {ResizableHandle, ResizablePanel, ResizablePanelGroup} from '@/components/ui/resizable'
-import {useAppStore} from '@/stores/useAppStore'
-
-const store = useAppStore()
-
-// Watch for the first slide to be added and open the code editor automatically
-watch(() => store.slides.length, (newLength, oldLength) => {
-  if (newLength > 0 && oldLength === 0) {
-    store.showCodeEditor = true
-  }
-})
-
 </script>
 
 <template>
@@ -27,18 +14,15 @@ watch(() => store.slides.length, (newLength, oldLength) => {
     <div class="flex-1 overflow-hidden p-4">
       <ResizablePanelGroup class="h-full rounded-xl overflow-visible gap-2" direction="horizontal">
         
-        <ResizablePanel :default-size="30" :max-size="45" :min-size="25" class="bg-card rounded-xl border border-border/50 overflow-hidden">
-          <div class="h-full w-full relative">
-            <ChatContainer />
-            <div v-if="store.showCodeEditor" class="absolute inset-0 z-20 p-4 pointer-events-none flex flex-col">
-              <CodeEditorPanel class="w-full h-full pointer-events-auto" />
-            </div>
-          </div>
+        <!-- 左侧控制面板：输入框 + 分页 + 代码编辑器 -->
+        <ResizablePanel :default-size="35" :max-size="45" :min-size="30" class="bg-card rounded-xl border border-border/50 overflow-hidden">
+          <SlideControlPanel />
         </ResizablePanel>
         
         <ResizableHandle class="w-1 bg-transparent hover:bg-primary/20 transition-colors rounded-full" with-handle />
         
-        <ResizablePanel :default-size="70" class="bg-card rounded-xl border border-border/50 overflow-hidden">
+        <!-- 右侧幻灯片预览区域 -->
+        <ResizablePanel :default-size="65" class="bg-card rounded-xl border border-border/50 overflow-hidden">
           <SlidesContainer />
         </ResizablePanel>
 

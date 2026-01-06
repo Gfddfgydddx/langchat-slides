@@ -4,7 +4,6 @@ import {useAppStore} from '@/stores/useAppStore'
 import {Button} from '@/components/ui/button'
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select'
 import {
-  Code,
   Download,
   FileImage,
   FileText,
@@ -39,10 +38,7 @@ const { t } = useI18n()
 </script>
 
 <template>
-  <div class="h-14 flex items-center justify-between px-6 bg-card transition-colors duration-300 border-b border-border/50">
-    <div class="text-sm font-medium text-muted-foreground">
-      {{ store.currentSlide?.title || t('preview').value }}
-    </div>
+  <div class="h-14 flex items-center justify-end px-6 bg-card transition-colors duration-300 border-b border-border/50">
     <div class="flex items-center gap-2">
       <!-- Theme Toggle -->
       <Button
@@ -66,18 +62,6 @@ const { t } = useI18n()
         @click="store.toggleSketchStyle"
       >
         <PenTool class="h-4 w-4" />
-      </Button>
-
-      <!-- Code Editor Toggle -->
-      <Button
-        :class="store.showCodeEditor ? 'text-primary bg-primary/10' : ''"
-        :title="store.showCodeEditor ? t('closeCodeEditor').value : t('openCodeEditor').value"
-        class="h-8 w-8"
-        size="icon"
-        variant="ghost"
-        @click="store.toggleCodeEditor"
-      >
-        <Code class="h-4 w-4" />
       </Button>
 
       <!-- Palette Selector -->
@@ -145,8 +129,6 @@ const { t } = useI18n()
         </Button>
       </div>
 
-      <div class="w-px h-4 bg-border/50 mx-1"></div>
-
       <!-- Fullscreen Toggle -->
       <Button
         :title="props.isFullscreen ? 'Exit Fullscreen' : 'Enter Fullscreen'"
@@ -169,29 +151,29 @@ const { t } = useI18n()
             <span class="text-xs">{{ t('exportFormat').value }}</span>
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" class="w-40">
+        <DropdownMenuContent align="end" class="min-w-[160px]">
           <DropdownMenuItem class="cursor-pointer" @click="store.triggerExport('png')">
-            <div class="flex items-center gap-2">
-              <FileImage class="h-3.5 w-3.5 text-muted-foreground" />
-              <span>{{ t('exportPng').value }}</span>
+            <div class="flex items-center gap-2 w-full">
+              <FileImage class="h-3.5 w-3.5 text-muted-foreground shrink-0" />
+              <span class="whitespace-nowrap">{{ t('exportPng').value }}</span>
             </div>
           </DropdownMenuItem>
           <DropdownMenuItem class="cursor-pointer" @click="store.triggerExport('svg')">
-            <div class="flex items-center gap-2">
-              <FileText class="h-3.5 w-3.5 text-muted-foreground" />
-              <span>{{ t('exportSvg').value }}</span>
+            <div class="flex items-center gap-2 w-full">
+              <FileText class="h-3.5 w-3.5 text-muted-foreground shrink-0" />
+              <span class="whitespace-nowrap">{{ t('exportSvg').value }}</span>
             </div>
           </DropdownMenuItem>
           <DropdownMenuItem class="cursor-pointer" @click="store.triggerExport('pdf')">
-            <div class="flex items-center gap-2">
-              <Image class="h-3.5 w-3.5 text-muted-foreground" />
-              <span>{{ t('exportPdf').value }}</span>
+            <div class="flex items-center gap-2 w-full">
+              <Image class="h-3.5 w-3.5 text-muted-foreground shrink-0" />
+              <span class="whitespace-nowrap">{{ t('exportPdf').value }}</span>
             </div>
           </DropdownMenuItem>
           <DropdownMenuItem class="cursor-pointer" @click="store.triggerExport('pptx')">
-            <div class="flex items-center gap-2">
-              <Presentation class="h-3.5 w-3.5 text-muted-foreground" />
-              <span>{{ t('exportPpt').value }}</span>
+            <div class="flex items-center gap-2 w-full">
+              <Presentation class="h-3.5 w-3.5 text-muted-foreground shrink-0" />
+              <span class="whitespace-nowrap">{{ t('exportPpt').value }}</span>
             </div>
           </DropdownMenuItem>
         </DropdownMenuContent>
@@ -206,17 +188,17 @@ const { t } = useI18n()
             <Settings2 class="h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" class="w-56">
+        <DropdownMenuContent align="end" class="min-w-[220px]">
           <CustomSlideDialog />
           
-          <DropdownMenuItem class="cursor-pointer" @click="store.slideRenderMode = store.slideRenderMode === 'replace' ? 'append' : 'replace'">
-            <div class="flex items-center justify-between w-full">
-              <div class="flex items-center gap-2">
-                <RefreshCw v-if="store.slideRenderMode === 'replace'" class="h-3.5 w-3.5 text-muted-foreground" />
-                <ListPlus v-else class="h-3.5 w-3.5 text-muted-foreground" />
-                <span>{{ store.slideRenderMode === 'replace' ? t('replaceMode').value : t('appendMode').value }}</span>
+          <DropdownMenuItem class="cursor-pointer" @click="store.toggleSlideRenderMode()">
+            <div class="flex items-center justify-between w-full gap-2">
+              <div class="flex items-center gap-2 min-w-0 flex-1">
+                <RefreshCw v-if="store.slideRenderMode === 'replace'" class="h-3.5 w-3.5 text-muted-foreground shrink-0" />
+                <ListPlus v-else class="h-3.5 w-3.5 text-muted-foreground shrink-0" />
+                <span class="whitespace-nowrap overflow-hidden text-ellipsis">{{ store.slideRenderMode === 'replace' ? t('replaceMode').value : t('appendMode').value }}</span>
               </div>
-              <span class="text-[10px] text-muted-foreground bg-muted px-1.5 rounded">{{ store.slideRenderMode }}</span>
+              <span class="text-[10px] text-muted-foreground bg-muted px-1.5 rounded shrink-0">{{ store.slideRenderMode }}</span>
             </div>
           </DropdownMenuItem>
 
@@ -224,9 +206,9 @@ const { t } = useI18n()
 
           <!-- Dangerous Actions -->
           <DropdownMenuItem class="cursor-pointer text-destructive focus:text-destructive focus:bg-destructive/10" @click="store.clearSlides">
-            <div class="flex items-center gap-2">
-              <Trash2 class="h-3.5 w-3.5" />
-              <span>{{ t('clearAllSlides').value }}</span>
+            <div class="flex items-center gap-2 w-full">
+              <Trash2 class="h-3.5 w-3.5 shrink-0" />
+              <span class="whitespace-nowrap">{{ t('clearAllSlides').value }}</span>
             </div>
           </DropdownMenuItem>
         </DropdownMenuContent>

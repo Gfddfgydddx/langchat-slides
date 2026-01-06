@@ -120,8 +120,41 @@ watch(() => store.exportRequest, async (request) => {
 const BASE_WIDTH = 1280
 const BASE_HEIGHT = 720
 
+// 检查语法是否足够完整用于渲染
+function isSyntaxComplete(syntax: string): boolean {
+  const trimmed = syntax.trim()
+  
+  // 必须以 "infographic" 开头
+  if (!trimmed.startsWith('infographic')) {
+    return false
+  }
+  
+  // 必须包含 "data" 关键字
+  if (!trimmed.includes('data')) {
+    return false
+  }
+  
+  // 检查基本结构是否完整
+  // 如果在流式渲染中，data部分可能还不完整
+  // 但至少应该有 infographic、template 名称和 data 关键字
+  
+  // 检查是否以常见的不完整模式结尾
+  const lastChars = trimmed.slice(-10)
+  // 如果最后以未闭合的引号或对象标记结尾，可能还在输入
+  if (lastChars.match(/["']$/) || lastChars.match(/-\s*$/)) {
+    return false
+  }
+  
+  // 最小长度检查（至少要有基本的模板名和data）
+  if (trimmed.length < 50) {
+    return false
+  }
+  
+  return true
+}
+
 function renderInfographic(newSyntax: string) {
-  // Clear previous error when attempting to render
+  // 清除之前的错误状态
   renderError.value = null
 
   if (!store.infographic) {
@@ -135,8 +168,15 @@ function renderInfographic(newSyntax: string) {
     return
   }
 
+  // 检查语法是否足够完整
+  if (!isSyntaxComplete(newSyntax)) {
+    console.log(`⏸️ SlidePreview: Syntax incomplete, skipping render`)
+    // 不显示错误，只是不渲染
+    return
+  }
+
   try {
-    // Render with original syntax (don't modify it)
+    // 渲染时捕获可能的错误
     store.infographic.render(newSyntax)
     
     // Apply theme and palette using infographic.update() API

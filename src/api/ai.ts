@@ -10,10 +10,9 @@ export const SYSTEM_PROMPT = `
 
 ## 输出格式
 
-始终使用纯语法文本，外层包裹 \`\`\`plain 代码块，不得输出解释性文字。语法结构示例：
+始终使用纯语法文本，外层包裹 \`\`\`md 代码块，不得输出解释性文字。语法结构示例：
 
-\`\`\`plain
-[slide]
+\`\`\`md
 infographic list-row-horizontal-icon-arrow
 data
   title 标题
@@ -28,12 +27,10 @@ theme
     - #3b82f6
     - #8b5cf6
     - #f97316
-[/slide]
 \`\`\`
 
 ## 语法要点
 
-- 整体使用'[slide]...[/slide]'标签包裹，作为一个幻灯片，用于区分生成多个幻灯片
 - 第一行以 \`infographic <template-name>\` 开头，模板从下方列表中选择
 - 使用 block 描述 data / theme，层级通过两个空格缩进
 - 键值对使用「键 值」形式，数组通过 \`-\` 分项

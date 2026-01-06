@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import SettingsDialog from './SettingsDialog.vue'
-import ExampleGenerator from '@/components/ExampleGenerator.vue'
+import ExampleGenerator from '@/examples/ExampleGenerator.vue'
 import {Button} from '@/components/ui/button'
 import {
   NavigationMenu,

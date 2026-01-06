@@ -10,110 +10,74 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import {useAppStore} from '@/stores/useAppStore'
-import {nanoid} from 'nanoid'
 import {Check, PlayCircle, Sparkles} from 'lucide-vue-next'
-import {useThrottleFn} from '@vueuse/core'
 import type {Example} from '@/examples/examples'
 import {examples} from '@/examples/examples'
 
 const store = useAppStore()
 
-// Store reference to initial slides for throttled updates
-let initialSlides: any[] = []
-
-// Throttle updates to avoid excessive re-renders
-const throttledUpdate = useThrottleFn((content: string) => {
-  store.updateLastMessage(content)
-  parseSlides(content)
-}, 100)
-
 // Track currently selected example
 const selectedExample = ref<Example | null>(null)
+// 保存当前slide的ID，避免频繁创建新ID导致组件重新挂载
+const currentSlideId = ref<string | null>(null)
 
 // Simulate streaming output
 async function simulateStreamResponse(example: Example) {
   // Set selected example
   selectedExample.value = example
 
-  // Add user message with natural language
-  store.addMessage({
-    id: nanoid(),
-    role: 'user',
-    content: example.userMessage
-  })
-
-  // Add placeholder AI message
-  const aiMsgId = nanoid()
-  store.addMessage({
-    id: aiMsgId,
-    role: 'assistant',
-    content: ''
-  })
-
   store.isStreaming = true
   let fullContent = ''
 
   try {
-    // Simulate streaming with chunks
+    // 创建初始slide ID（只在开始时创建一次）
+    currentSlideId.value = `slide-${Date.now()}`
+    
+    // 模拟流式输出
     const chunkSize = 10 // Process 10 characters at a time
     const delay = 100 // 100ms delay between chunks
 
     for (let i = 0; i < example.slides.length; i += chunkSize) {
       const chunk = example.slides.slice(i, i + chunkSize)
       fullContent += chunk
-      // Use throttled update for smooth rendering
-      throttledUpdate(fullContent)
+      
+      // Parse and update slides incrementally
+      parseSlides(fullContent, currentSlideId.value!)
       
       // Wait before next chunk
       await new Promise(resolve => setTimeout(resolve, delay))
     }
   } catch (error: any) {
-    store.updateLastMessage(`Error: ${error.message}`)
     console.error('Stream error:', error)
+    throw error
   } finally {
     store.isStreaming = false
-    // Final update to ensure all content is rendered
-    store.updateLastMessage(fullContent)
-    // parseSlides(fullContent)
   }
 }
 
-function parseSlides(content: string) {
-  const parts = content.split('[slide]')
-  const potentialSlides = parts.slice(1)
+function parseSlides(content: string, slideId: string) {
+  // 直接使用整个内容作为幻灯片语法（不再使用[slide]标签）
+  const body = content.trim()
   
-  if (potentialSlides.length > 0) {
-    const newSlides = potentialSlides.map((part, index) => {
-      let body = part
-      const closingIndex = part.indexOf('[/slide]')
-      if (closingIndex !== -1) {
-        body = part.substring(0, closingIndex)
-      }
-      
-      body = body.trim()
-      
-      const slide = {
-        id: `slide-${index}`,
-        title: '',
-        content: body,
-        syntax: body
-      }
-      return slide
-    })
-    
-    const validSlides = newSlides.filter((s: any) => s.content.length > 5)
-    
-    if (validSlides.length > 0) {
-      const latestIndex = validSlides.length - 1
-      
-      store.setSlides(validSlides)
-      // Always switch to the latest slide
-      store.currentSlideIndex = latestIndex
+  if (body.length > 5) {
+    const slide = {
+      id: slideId,
+      title: '',
+      content: body,
+      syntax: body
     }
+    
+    store.setSlides([slide])
+    store.currentSlideIndex = 0
   }
 }
 
-function handleGenerateExample(example: Example) {
+function handleSelectExample(example: Example) {
+  // 将示例的描述填充到输入框
+  store.inputPrompt = example.description
+  selectedExample.value = example
+  
+  // 同时触发模拟流式响应，生成幻灯片代码
   simulateStreamResponse(example)
 }
 </script>
@@ -137,7 +101,7 @@ function handleGenerateExample(example: Example) {
         :key="example.id"
         :class="selectedExample?.id === example.id ? 'bg-accent' : ''"
         class="cursor-pointer gap-2"
-        @click="handleGenerateExample(example)"
+        @click="handleSelectExample(example)"
       >
         <div class="flex flex-col gap-0.5 flex-1">
           <span class="font-medium">{{ example.name }}</span>

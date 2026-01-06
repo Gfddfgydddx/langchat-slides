@@ -12,8 +12,7 @@ export const examples: Example[] = [
     name: '技术演进史',
     description: '展示互联网技术发展历程',
     userMessage: '请帮我生成关于互联网技术演进史的幻灯片，包含从Web 1.0到AI时代的关键里程碑',
-    slides: `[slide]
-infographic list-row-horizontal-icon-arrow
+    slides: `infographic list-row-horizontal-icon-arrow
 data
   title 互联网技术演进史
   desc 从Web 1.0到AI时代的关键里程碑
@@ -43,16 +42,14 @@ data
       desc ChatGPT引爆生成式AI革命
       icon mdi/brain
 theme
-  palette #3b82f6 #8b5cf6 #f97316
-[/slide]`
+  palette #3b82f6 #8b5cf6 #f97316`
   },
   {
     id: 'swot-analysis',
     name: 'SWOT分析',
     description: '战略分析框架',
     userMessage: '请帮我生成一个SWOT分析幻灯片，用于战略规划',
-    slides: `[slide]
-infographic compare-swot
+    slides: `infographic compare-swot
 data
   title SWOT Analysis
   desc Strategic planning technique
@@ -70,16 +67,14 @@ data
       desc External negative factors
       icon mdi/skull-outline
 theme
-  palette #10b981 #f59e0b #3b82f6 #ef4444
-[/slide]`
+  palette #10b981 #f59e0b #3b82f6 #ef4444`
   },
   {
     id: 'project-roadmap',
     name: '项目路线图',
     description: '项目阶段和里程碑',
     userMessage: '请帮我生成一个项目路线图，展示关键阶段和时间节点',
-    slides: `[slide]
-infographic sequence-roadmap-vertical-simple
+    slides: `infographic sequence-roadmap-vertical-simple
 data
   title Project Roadmap
   desc Key phases and milestones
@@ -97,16 +92,14 @@ data
       desc Q4 2024 - Go live
       icon mdi/rocket-launch
 theme
-  palette #8b5cf6 #06b6d4 #10b981 #f59e0b
-[/slide]`
+  palette #8b5cf6 #06b6d4 #10b981 #f59e0b`
   },
   {
     id: 'market-share',
     name: '市场份额',
     description: '市场占比分析',
     userMessage: '请帮我生成一个市场份额分析图表，展示各品牌占比',
-    slides: `[slide]
-infographic chart-pie-donut-plain-text
+    slides: `infographic chart-pie-donut-plain-text
 data
   title Market Share
   desc Global Smartphone Market 2023
@@ -124,16 +117,14 @@ data
       value 48
       desc Diverse players
 theme
-  palette #3b82f6 #8b5cf6 #ec4899 #94a3b8
-[/slide]`
+  palette #3b82f6 #8b5cf6 #ec4899 #94a3b8`
   },
   {
     id: 'core-values',
     name: '核心价值观',
     description: '企业文化展示',
     userMessage: '请帮我生成一个核心价值观展示幻灯片',
-    slides: `[slide]
-infographic list-grid-badge-card
+    slides: `infographic list-grid-badge-card
 data
   title Core Values
   desc What drives our culture
@@ -151,16 +142,14 @@ data
       desc Putting users first
       icon mdi/heart
 theme
-  palette #f97316 #10b981 #3b82f6 #ec4899
-[/slide]`
+  palette #f97316 #10b981 #3b82f6 #ec4899`
   },
   {
     id: 'timeline-history',
     name: '历史时间轴',
     description: '公司发展历程',
     userMessage: '请帮我生成一个公司发展历程的时间轴',
-    slides: `[slide]
-infographic sequence-color-snake-steps-horizontal-icon-line
+    slides: `infographic sequence-color-snake-steps-horizontal-icon-line
 data
   title Our Journey
   desc Company milestones over years
@@ -181,16 +170,14 @@ data
       desc IPO successful
       icon mdi/chart-line
 theme
-  palette #06b6d4 #3b82f6 #8b5cf6 #ec4899 #f59e0b
-[/slide]`
+  palette #06b6d4 #3b82f6 #8b5cf6 #ec4899 #f59e0b`
   },
   {
     id: 'process-flow',
     name: '流程图',
     description: '业务流程展示',
     userMessage: '请帮我生成一个业务流程图，展示工作流程',
-    slides: `[slide]
-infographic sequence-zigzag-steps-underline-text
+    slides: `infographic sequence-zigzag-steps-underline-text
 data
   title Workflow Process
   desc Step by step guide
@@ -211,16 +198,14 @@ data
       desc Go to production
       icon mdi/rocket-launch
 theme
-  palette #3b82f6 #06b6d4 #10b981 #f59e0b #ec4899
-[/slide]`
+  palette #3b82f6 #06b6d4 #10b981 #f59e0b #ec4899`
   },
   {
     id: 'comparison',
     name: '对比分析',
     description: '产品或方案对比',
     userMessage: '请帮我生成一个产品对比分析图表',
-    slides: `[slide]
-infographic compare-binary-horizontal-badge-card-arrow
+    slides: `infographic compare-binary-horizontal-badge-card-arrow
 data
   title Product Comparison
   desc Feature by feature
@@ -235,16 +220,14 @@ data
       desc Premium features
       icon mdi/star-circle
 theme
-  palette #3b82f6 #8b5cf6 #f59e0b
-[/slide]`
+  palette #3b82f6 #8b5cf6 #f59e0b`
   },
   {
     id: 'data-statistics',
     name: '数据统计',
     description: '关键指标展示',
     userMessage: '请帮我生成一个数据统计图表，展示关键业务指标',
-    slides: `[slide]
-infographic chart-bar-plain-text
+    slides: `infographic chart-bar-plain-text
 data
   title Key Metrics
   desc Performance overview
@@ -266,16 +249,14 @@ data
       unit %
       icon mdi/trending-up
 theme
-  palette #10b981 #3b82f6 #f59e0b #ec4899
-[/slide]`
+  palette #10b981 #3b82f6 #f59e0b #ec4899`
   },
   {
     id: 'organization',
     name: '组织架构',
     description: '团队结构展示',
     userMessage: '请帮我生成一个组织架构图',
-    slides: `[slide]
-infographic hierarchy-tree-tech-style-badge-card
+    slides: `infographic hierarchy-tree-tech-style-badge-card
 data
   title Organization Structure
   desc Team hierarchy
@@ -290,16 +271,14 @@ data
         - label CFO
           icon mdi/cash
 theme
-  palette #3b82f6 #8b5cf6 #10b981 #f59e0b
-[/slide]`
+  palette #3b82f6 #8b5cf6 #10b981 #f59e0b`
   },
   {
     id: 'growth-trend',
     name: '增长趋势',
     description: '折线图展示趋势变化',
     userMessage: '请帮我生成一个销售增长趋势折线图',
-    slides: `[slide]
-infographic chart-line-plain-text
+    slides: `infographic chart-line-plain-text
 data
   title 销售增长趋势
   desc 2024年月度销售数据
@@ -323,16 +302,14 @@ data
       value 350
       icon mdi/trending-up
 theme
-  palette #10b981 #3b82f6 #8b5cf6
-[/slide]`
+  palette #10b981 #3b82f6 #8b5cf6`
   },
   {
     id: 'circular-process',
     name: '循环流程',
     description: '圆形循环展示',
     userMessage: '请帮我生成一个产品开发循环流程图',
-    slides: `[slide]
-infographic sequence-circular-simple
+    slides: `infographic sequence-circular-simple
 data
   title 产品开发循环
   desc 持续改进的迭代流程
@@ -353,16 +330,14 @@ data
       desc 部署到生产环境
       icon mdi/rocket-launch
 theme
-  palette #3b82f6 #06b6d4 #10b981 #ec4899 #f59e0b
-[/slide]`
+  palette #3b82f6 #06b6d4 #10b981 #ec4899 #f59e0b`
   },
   {
     id: 'product-compare',
     name: '产品对比',
     description: '二选一对比分析',
     userMessage: '请帮我生成两个产品的对比分析',
-    slides: `[slide]
-infographic compare-binary-horizontal-simple-fold
+    slides: `infographic compare-binary-horizontal-simple-fold
 data
   title 产品特性对比
   desc 核心功能分析
@@ -374,16 +349,14 @@ data
       desc 高端专业的选择
       icon mdi/star-circle
 theme
-  palette #3b82f6 #8b5cf6
-[/slide]`
+  palette #3b82f6 #8b5cf6`
   },
   {
     id: 'quadrant-analysis',
     name: '四象限分析',
     description: '战略矩阵分析',
     userMessage: '请帮我生成一个四象限战略分析图',
-    slides: `[slide]
-infographic quadrant-quarter-simple-card
+    slides: `infographic quadrant-quarter-simple-card
 data
   title 战略四象限分析
   desc 市场机会评估
@@ -401,16 +374,14 @@ data
       desc 瘦狗业务
       icon mdi/paw
 theme
-  palette #10b981 #3b82f6 #f59e0b #ef4444
-[/slide]`
+  palette #10b981 #3b82f6 #f59e0b #ef4444`
   },
   {
     id: 'column-chart',
     name: '柱状图',
     description: '数据对比展示',
     userMessage: '请帮我生成一个季度业绩对比柱状图',
-    slides: `[slide]
-infographic chart-column-simple
+    slides: `infographic chart-column-simple
 data
   title 季度业绩对比
   desc 2024年各季度表现
@@ -428,16 +399,14 @@ data
       value 890
       icon mdi/trending-up
 theme
-  palette #06b6d4 #10b981 #8b5cf6 #ec4899
-[/slide]`
+  palette #06b6d4 #10b981 #8b5cf6 #ec4899`
   },
   {
     id: 'pyramid-structure',
     name: '金字塔结构',
     description: '层级关系展示',
     userMessage: '请帮我生成一个需求金字塔结构图',
-    slides: `[slide]
-infographic sequence-pyramid-simple
+    slides: `infographic sequence-pyramid-simple
 data
   title 用户需求金字塔
   desc 从基础到高级需求
@@ -458,16 +427,14 @@ data
       desc 用户价值最大化
       icon mdi/star
 theme
-  palette #3b82f6 #8b5cf6 #f59e0b #ec4899 #ef4444
-[/slide]`
+  palette #3b82f6 #8b5cf6 #f59e0b #ec4899 #ef4444`
   },
   {
     id: 'step-process',
     name: '步骤流程',
     description: ' ascending 步骤展示',
     userMessage: '请帮我生成一个 ascending 步骤流程图',
-    slides: `[slide]
-infographic sequence-ascending-steps
+    slides: `infographic sequence-ascending-steps
 data
   title 项目实施步骤
   desc 从计划到完成
@@ -488,7 +455,6 @@ data
       desc 项目交付
       icon mdi/rocket
 theme
-  palette #06b6d4 #10b981 #3b82f6 #8b5cf6 #f59e0b
-[/slide]`
+  palette #06b6d4 #10b981 #3b82f6 #8b5cf6 #f59e0b`
   }
 ]
