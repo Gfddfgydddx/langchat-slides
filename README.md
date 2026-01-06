@@ -40,6 +40,8 @@
 
 ## 🎯 Product Features
 
+![slides](docs/slides.png)
+
 ### 🎨 Core Capabilities
 
 - **🤖 AI-Powered Generation**: Generate professional slides instantly with natural language descriptions
