@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import {onMounted, onUnmounted, ref, watch} from 'vue'
+import {nextTick, onMounted, onUnmounted, ref, watch} from 'vue'
 import {Infographic} from '@antv/infographic'
 import {useI18n} from '@/composables/useI18n'
 import {useAppStore} from '@/stores/useAppStore'
-import {applyThemeToSyntax} from '@/lib/slide-utils'
 import jsPDF from 'jspdf'
+import PptxGenJS from 'pptxgenjs'
 
 const props = defineProps<{
   syntax: string
@@ -22,6 +22,31 @@ const contentRef = ref<HTMLElement | null>(null)
 const scale = ref(1)
 const renderError = ref<string | null>(null)
 const isInitializing = ref(false)
+
+// Watch for infographic to update title from rendered options
+watch(
+  () => store.infographic,
+  async (infographic) => {
+    if (!infographic || !store.currentSlide || store.currentSlide.id !== props.id) return
+    
+    // Wait a bit for rendering to complete
+    await nextTick()
+    
+    try {
+      const options = infographic.getOptions()
+      if (options?.data?.title && store.slides[store.currentSlideIndex]) {
+        // Only update if title is different
+        if (store.slides[store.currentSlideIndex].title !== options.data.title) {
+          store.slides[store.currentSlideIndex].title = options.data.title
+          console.log(`SlidePreview: Updated title for slide ${props.id}:`, options.data.title)
+        }
+      }
+    } catch (e) {
+      console.warn('Failed to get options for title update:', e)
+    }
+  },
+  { immediate: true, deep: true }
+)
 
 // Watch for export requests
 watch(() => store.exportRequest, async (request) => {
@@ -63,6 +88,25 @@ watch(() => store.exportRequest, async (request) => {
       
       pdf.addImage(dataUrl, 'PNG', 0, 0, pdfWidth, pdfHeight)
       pdf.save(`slide-${props.id}.pdf`)
+    } else if (format === 'pptx') {
+      const dataUrl = await store.infographic.toDataURL({ type: 'png' })
+      const img = new Image()
+      img.src = dataUrl
+      await new Promise(resolve => img.onload = resolve)
+      
+      const pptx = new PptxGenJS()
+      pptx.layout = 'LAYOUT_16x9'
+      
+      const slide = pptx.addSlide()
+      slide.addImage({
+        data: dataUrl,
+        x: 0,
+        y: 0,
+        w: '100%',
+        h: '100%'
+      })
+      
+      await pptx.writeFile({ fileName: filename })
     }
   } catch (e) {
     console.error('Export failed:', e)
@@ -91,12 +135,38 @@ function renderInfographic(newSyntax: string) {
     return
   }
 
-  // Apply theme and palette by modifying syntax
-  // Always use the original props.syntax to avoid accumulation errors
-  const modifiedSyntax = applyThemeToSyntax(newSyntax, store)
-
   try {
-    store.infographic.render(modifiedSyntax)
+    // Render with original syntax (don't modify it)
+    store.infographic.render(newSyntax)
+    
+    // Apply theme and palette using infographic.update() API
+    const updateConfig: any = {}
+    
+    if (store.currentTheme === 'dark') {
+      updateConfig.theme = 'dark'
+    }
+    
+    if (store.sketchStyle) {
+      updateConfig.theme = updateConfig.theme ? `${updateConfig.theme} hand-drawn` : 'hand-drawn'
+    }
+    
+    // Apply palette if not default
+    if (store.currentPalette !== 'default') {
+      if (store.currentPalette === 'custom') {
+        updateConfig.palette = store.customPalette
+      } else {
+        const p = store.palettes.find(p => p.name === store.currentPalette)
+        if (p) {
+          updateConfig.palette = p.colors
+        }
+      }
+    }
+    
+    // Only call update if there are changes
+    if (Object.keys(updateConfig).length > 0) {
+      store.infographic.update(updateConfig)
+      console.log('Applied theme config:', updateConfig)
+    }
 
     // Update title in store from rendered options
     const options = store.infographic.getOptions()
@@ -104,9 +174,12 @@ function renderInfographic(newSyntax: string) {
     // Only update if we have a valid title and it's different
     if (options?.data?.title && store.currentSlide) {
       store.slides[store.currentSlideIndex]!.title = options.data.title
+      console.log('✅ Rendered successfully, title:', options.data.title)
+    } else {
+      console.log('⚠️ Rendered but no title found in options')
     }
   } catch (e) {
-    console.error('Failed to render infographic:', e)
+    console.error('❌ Failed to render infographic:', e)
     renderError.value = 'renderError'
   }
 }

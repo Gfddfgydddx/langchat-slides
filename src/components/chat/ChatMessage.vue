@@ -95,10 +95,16 @@ async function copyText() {
 function reRender() {
   if (!props.message.content || props.message.role !== 'assistant') return
   
+  console.log('=== ChatMessage Re-render ===')
+  console.log('Original message content length:', props.message.content.length)
+  console.log('Original content (first 1000 chars):', props.message.content.substring(0, 1000))
+  
   // Parse and render slides from this message
   const content = props.message.content
   const parts = content.split('[slide]')
   const potentialSlides = parts.slice(1)
+  
+  console.log('Number of [slide] tags found:', potentialSlides.length)
   
   if (potentialSlides.length > 0) {
     const newSlides = potentialSlides.map((part, index) => {
@@ -110,24 +116,36 @@ function reRender() {
       
       body = body.trim()
       
-      const titleMatch = body.match(/^title\s+(.*)/m)
-      
+      // Don't extract title here - let SlidePreview get it from infographic
       const slide = {
-        id: `slide-${index}`,
-        title: (titleMatch && titleMatch[1]) ? titleMatch[1] : `Slide ${index + 1}`,
+        id: `slide-${Date.now()}-${index}`,
+        title: '', // Will be updated by SlidePreview from infographic
         content: body,
         syntax: body
       }
-      console.log('ChatMEssage', slide)
+      
+      console.log(`\n--- Slide ${index + 1} ---`)
+      console.log('ID:', slide.id)
+      console.log('Syntax length:', body.length)
+      console.log('Syntax (first 500 chars):', body.substring(0, 500))
+      
       return slide
     })
     
     const validSlides = newSlides.filter(s => s.content.length > 5)
     
+    console.log('\n=== Summary ===')
+    console.log('Total slides parsed:', newSlides.length)
+    console.log('Valid slides (length > 5):', validSlides.length)
+    
     if (validSlides.length > 0) {
+      // Use setSlides to replace all slides
       store.setSlides(validSlides)
-      // Switch to the latest slide
-      store.currentSlideIndex = validSlides.length - 1
+      // Switch to the first slide (not the last)
+      store.currentSlideIndex = 0
+      
+      console.log('✅ Re-rendered', validSlides.length, 'slides, switched to index 0')
+      console.log('========================\n')
     }
   }
 }

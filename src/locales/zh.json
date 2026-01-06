@@ -49,6 +49,7 @@
   "exportWebp": "WebP 图片",
   "exportSvg": "SVG 矢量图",
   "exportPdf": "PDF 文档",
+  "exportPpt": "PPT 演示文稿",
 
   "custom": "自定义",
   "customSlide": "自定义幻灯片",

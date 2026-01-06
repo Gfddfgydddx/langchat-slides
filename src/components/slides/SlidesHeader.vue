@@ -1,38 +1,27 @@
 <script lang="ts" setup>
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger
-} from '@/components/ui/dropdown-menu'
+import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger} from '@/components/ui/dropdown-menu'
 import {useAppStore} from '@/stores/useAppStore'
 import {Button} from '@/components/ui/button'
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select'
 import {
-  Download, 
-  Image, 
-  ListPlus, 
-  RefreshCw, 
-  Trash2, 
-  Palette,
-  Moon,
-  Sun,
-  PenTool,
-  Check,
   Code,
+  Download,
   FileImage,
   FileText,
-  ZoomIn,
-  ZoomOut,
-  Maximize,
-  Minimize,
+  Image,
+  ListPlus,
   Maximize2,
   Minimize2,
-  MoreVertical,
-  Settings,
-  Archive,
-  Eye,
-  Settings2
+  Moon,
+  Palette,
+  PenTool,
+  Presentation,
+  RefreshCw,
+  Settings2,
+  Sun,
+  Trash2,
+  ZoomIn,
+  ZoomOut
 } from 'lucide-vue-next'
 import {useI18n} from '@/composables/useI18n'
 import CustomSlideDialog from '@/components/layout/CustomSlideDialog.vue'
@@ -69,9 +58,9 @@ const { t } = useI18n()
 
       <!-- Sketch Style Toggle -->
       <Button
+        :class="store.sketchStyle ? 'text-primary bg-primary/10' : ''"
         :title="store.sketchStyle ? 'Disable Sketch Style' : 'Enable Sketch Style'"
         class="h-8 w-8"
-        :class="store.sketchStyle ? 'text-primary bg-primary/10' : ''"
         size="icon"
         variant="ghost"
         @click="store.toggleSketchStyle"
@@ -81,9 +70,9 @@ const { t } = useI18n()
 
       <!-- Code Editor Toggle -->
       <Button
+        :class="store.showCodeEditor ? 'text-primary bg-primary/10' : ''"
         :title="store.showCodeEditor ? t('closeCodeEditor').value : t('openCodeEditor').value"
         class="h-8 w-8"
-        :class="store.showCodeEditor ? 'text-primary bg-primary/10' : ''"
         size="icon"
         variant="ghost"
         @click="store.toggleCodeEditor"
@@ -95,7 +84,7 @@ const { t } = useI18n()
       <Select :model-value="store.currentPalette" @update:model-value="(v) => store.updatePalette(v as string)">
         <SelectTrigger class="h-8 w-[120px] px-2 gap-2">
           <Palette class="h-3.5 w-3.5 shrink-0" />
-          <SelectValue placeholder="Palette" class="text-xs truncate" />
+          <SelectValue class="text-xs truncate" placeholder="Palette" />
         </SelectTrigger>
         <SelectContent>
           <SelectItem v-for="palette in store.palettes" :key="palette.name" :value="palette.name">
@@ -104,8 +93,8 @@ const { t } = useI18n()
                 <div 
                   v-for="(color, idx) in palette.colors.slice(0, 4)" 
                   :key="idx"
-                  class="w-3 h-3 rounded-full"
                   :style="{ backgroundColor: color }"
+                  class="w-3 h-3 rounded-full"
                 />
               </div>
               <span class="capitalize">{{ palette.name }}</span>
@@ -117,8 +106,8 @@ const { t } = useI18n()
                 <div 
                   v-for="(color, idx) in store.customPalette.slice(0, 4)" 
                   :key="idx"
-                  class="w-3 h-3 rounded-full"
                   :style="{ backgroundColor: color }"
+                  class="w-3 h-3 rounded-full"
                 />
               </div>
               <span>Custom</span>
@@ -132,11 +121,11 @@ const { t } = useI18n()
       <!-- Zoom Controls -->
       <div class="flex items-center gap-1 bg-muted/30 rounded-lg p-0.5 border border-border/50">
         <Button
-          title="Zoom Out"
+          :disabled="store.canvasScale <= 0.5"
           class="h-7 w-7"
           size="icon"
+          title="Zoom Out"
           variant="ghost"
-          :disabled="store.canvasScale <= 0.5"
           @click="store.zoomOut()"
         >
           <ZoomOut class="h-3.5 w-3.5" />
@@ -145,11 +134,11 @@ const { t } = useI18n()
           {{ Math.round(store.canvasScale * 100) }}%
         </span>
         <Button
-          title="Zoom In"
+          :disabled="store.canvasScale >= 2.5"
           class="h-7 w-7"
           size="icon"
+          title="Zoom In"
           variant="ghost"
-          :disabled="store.canvasScale >= 2.5"
           @click="store.zoomIn()"
         >
           <ZoomIn class="h-3.5 w-3.5" />
@@ -175,7 +164,7 @@ const { t } = useI18n()
       <!-- Export Dropdown -->
       <DropdownMenu>
         <DropdownMenuTrigger as-child>
-          <Button variant="ghost" size="sm" class="h-8 gap-2 px-3 hover:bg-muted font-medium">
+          <Button class="h-8 gap-2 px-3 hover:bg-muted font-medium" size="sm" variant="ghost">
             <Download class="h-3.5 w-3.5" />
             <span class="text-xs">{{ t('exportFormat').value }}</span>
           </Button>
@@ -199,6 +188,12 @@ const { t } = useI18n()
               <span>{{ t('exportPdf').value }}</span>
             </div>
           </DropdownMenuItem>
+          <DropdownMenuItem class="cursor-pointer" @click="store.triggerExport('pptx')">
+            <div class="flex items-center gap-2">
+              <Presentation class="h-3.5 w-3.5 text-muted-foreground" />
+              <span>{{ t('exportPpt').value }}</span>
+            </div>
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
 
@@ -207,7 +202,7 @@ const { t } = useI18n()
       <!-- More Actions Dropdown -->
       <DropdownMenu>
         <DropdownMenuTrigger as-child>
-          <Button variant="ghost" size="icon" class="h-8 w-8 hover:bg-muted">
+          <Button class="h-8 w-8 hover:bg-muted" size="icon" variant="ghost">
             <Settings2 class="h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>

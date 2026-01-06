@@ -94,6 +94,7 @@ function parseSlides(content: string) {
       
       const slide = {
         id: `slide-${index}`,
+        title: '',
         content: body,
         syntax: body
       }

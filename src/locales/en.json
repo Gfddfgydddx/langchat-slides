@@ -49,6 +49,7 @@
   "exportWebp": "WebP Image",
   "exportSvg": "SVG Vector",
   "exportPdf": "PDF Document",
+  "exportPpt": "PPT Presentation",
 
   "custom": "Custom",
   "customSlide": "Custom Slide",
